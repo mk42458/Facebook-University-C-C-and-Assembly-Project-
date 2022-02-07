@@ -1,131 +1,81 @@
-*
- * Project1.cpp
- *
- * Name: Mahek Kakkar
- * EE312 Summer 2020
- * SuperStrings
- */
 
-#include <stdio.h> // provides declarations for printf and putchar
-#include <stdint.h> // provides declarations for int32_t uint32_t and the other (new) standard C types
-//#include <string.h>
-/*
-All of your code must be in this file. Please no #includes other than standard system headers (ie.., stdio.h, stdint.h)
+// matrix-multiplication <Project2.cpp>
+// EE 312 Project 2 submission by
+// Mahek Kakkar
+// mk42458
+// Slip days used: 0
+// Fall 2021
+// Include the contents of this file at the top of every file that you submit, replacing the fields within <>.  Do not keep the <>.
 
-You must write this function (printSuperStrings). Do not change the way the function is declared (i.e., it has
-exactly two parameters, each parameter is a standard (mundane) C string (see Instruction).
-*/
+#include <stdio.h>
+#include <stdint.h>
+#include "MatrixMultiply.h"
+#include <cstdlib>
 
-
-
-//why a greyed out
-//compare function
-
-char NewStringArray[1000][1000];
-char NewSupStringArray[1000][1000];
-
-
-int stringLen(char* array){
-    //int a = 0;
-    int length = 0;
-
-    for(int a = 0; array[a] != '\0'; a++){
-        length++;
-        //a++;
+void multiplyMatrices(
+        double a[],
+        const uint32_t a_rows,
+        const uint32_t a_cols,
+        double b[],
+        const uint32_t b_cols,
+        double c[]) {
+    // https://en.wikipedia.org/wiki/Row-_and_column-major_order
+    //intialization of matrix
+   int k = 0;
+    c[a_rows * b_cols]; //size of the matrix
+    while( k < (a_rows * b_cols) ){
+        c[k] = 0;
+        k++;
     }
-    return length;
-}
-
-void StringArray(char stringArray []) {  //add new line and tab
-    int a = 0; //letter in array (columns) counter
-    int b = 0; //letter in new array
-    int word = 0; //word counter (rows)
-
-    while (a < stringLen(stringArray)) { //CHANGE!!!
-        // inc letters in string
-        if (stringArray[a] == ' ') {
-            NewStringArray[word][a] = 0; //?
-            b = 0; //resets letter
-            word++; //increments the count
-            //make new array
-            //inc rows and reset columns
-        } else if (stringArray[a] == 0) {
-            NewStringArray[word][a] = 0;
-            b = 0;
-            word++;
-        } else if ( stringArray[a] == '\n') {
-            NewStringArray[word][a] = 0;
-            b = 0;
-            word++;
-        }else if ( stringArray[a] == '\t'){ //
-            NewStringArray[word][a] = 0;
-            b = 0;
-            word++;
-            // currently found the end of a word
-        } else {
-            //letter
-            //while( stringArray[b != "\0")
-                    NewStringArray[word][b] = stringArray[a];//increment letters
-                    b++;
+    for (int i = 0; i < a_rows; i++) {
+        for (int j = 0; j < b_cols; j++) {
+            for (int z = 0; z < a_cols; z++) {
+                c[i * b_cols + j] += (a[i * a_cols + z] * b[z * b_cols + j]);  //equation
+            }
         }
-        a++; //increment letters
-
     }
-
 }
-void SuperStringArray( char superStringArray[]) {
-    int a = 0; //letter in array (columns) counter
-    int b = 0; //letter in new array
-    int word = 0; //word counter (rows)
 
-    while (a < stringLen(superStringArray)) { //do while string length is less than array
-        a++; // inc letters in string
-        if (superStringArray[a] == ' ') {
-            NewSupStringArray[word][a] = 0;
-            b = 0; //resets letter
-            word++; //increments the count
-            //make new array
-            //inc rows and reset colums
-        } else if (superStringArray[a] = 0) {
-            NewSupStringArray[word][a] = 0;
-            b = 0;
-            word++;
-        } else if ( superStringArray[a] == '\n') {
-            NewStringArray[word][a] = 0;
-            b= 0;
-            word++;
-        }else if ( superStringArray[a] == '\t'){ //
-            NewStringArray[word][a] = 0;
-            b = 0;
-            word++;
-            // currently found the end of a word
-        } else {
-            //letter
-            //while( stringArray[b != "\0")
-            NewStringArray[word][b] = superStringArray[a];//increment letters
-            b++;
+
+double** multiplyMatricesPtr(
+        double** a,
+        const uint32_t a_rows,
+        const uint32_t a_cols,
+        double** b,
+        const uint32_t b_cols) {
+double ** ptrArray;
+    ptrArray = (double **)malloc(sizeof(double *) * a_rows);
+    for (int i = 0; i < b_cols; i++) {
+        *(ptrArray + i) = (double *)malloc(sizeof(double) * b_cols);
+    }
+    for (int i = 0; i < a_rows; i++) {
+        for (int j = 0; j < b_cols; j++) {
+            ptrArray[i][j] = 0;
+            for (int z = 0; z < a_cols; z++) {
+                ptrArray[i][j] += a[i][z] * b[z][j]; // return product of matrix (a_rows * b_cols)
+            }
         }
-        a++; //increment letters
-
     }
-
+return ptrArray;
 }
 
 
 
-void compareStrings(  );
-
-//new array for matches
-// 2 for loops to check if match
-// if same inc both and if different inc superstring
-
-//outer string , inner super string
-//how to compare string with all of superstring words and then move on to next string word
-
-
-void printSuperStrings(char targets [], char candidates []) {
- StringArray(targets);
-
+// https://en.wikipedia.org/wiki/Transpose
+double** transposeMatrix(
+         double** a,
+         const uint32_t a_rows,
+         const uint32_t a_cols) {
+    // transpose: switching rows and columns
+    double **ptrArray = (double **) malloc(a_rows * (sizeof(double *)));
+    for (int y = 0; y < a_cols; y++) {
+        double *column = (double *) malloc(a_rows * sizeof(double));
+        ptrArray[y] = column;
+    }
+    for (int i = 0; i < a_cols; i++) {
+        for (int j = 0; j < a_rows; j++) {
+            ptrArray[i][j] = a[j][i]; //swap
+        }
+    }
+    return ptrArray;
 }
-
-
