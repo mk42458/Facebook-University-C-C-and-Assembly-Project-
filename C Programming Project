@@ -1,62 +1,131 @@
+*
+ * Project1.cpp
+ *
+ * Name: Mahek Kakkar
+ * EE312 Summer 2020
+ * SuperStrings
+ */
 
-//***************** Manhattan Distance Function****************************
-// Calculate Manhattan distance between two points
-// each point is two 4-bit unsigned numbers packed into an 8-bit value
-// Input parameter:  n1 = (x1,y1) is position of first point
-//                   n2 = (x2,y2) is position of second point
-// Output parameter:  |x1-x2| plus |y1-y2|
-// Error conditions: none
-// Test Cases:
-//  n1   x1,y1    n2   x2,y2  ManhattanDistance
-// 0x00 ( 0, 0), 0x30 ( 3, 0)    3+0=3
-// 0x4F ( 4,15), 0x58 ( 5, 8)    1+7=8  
-// 0xCE (12,14), 0x1A ( 1,10)   11+4=15
-// 0x2D ( 2,13), 0x2D ( 2,13)    0+0=0
-// 0xF0 (15, 0), 0x0F ( 0,15)  15+15=30
+#include <stdio.h> // provides declarations for printf and putchar
+#include <stdint.h> // provides declarations for int32_t uint32_t and the other (new) standard C types
+//#include <string.h>
+/*
+All of your code must be in this file. Please no #includes other than standard system headers (ie.., stdio.h, stdint.h)
 
-MY SOLUTION:
-uint32_t ManhattanDistance(uint8_t n1, uint8_t n2){
-uint32_t distance = 0;
-uint8_t x1 = (n1 & 0xF0) >> 4;
-uint8_t y1 = (n1 & 0x0F);
-uint8_t x2 = (n2 & 0xF0) >> 4;
-uint8_t y2 = (n2 & 0x0F);
-//variable = (condition)?(if true this):(else this);
-distance = (x1>x2)?(x1-x2):(x2-x1);
-distance += (y1>y2)?(y1-y2):(y2-y1);
-return distance;
+You must write this function (printSuperStrings). Do not change the way the function is declared (i.e., it has
+exactly two parameters, each parameter is a standard (mundane) C string (see Instruction).
+*/
 
-//******************Highest**************************
-// You are given two numbers a and m
-// Your function should find the largest number n such that
-// a^n is less than or equal to m
-// Input:  a is a 32-bit unsigned value
-//         m is a 32-bit unsigned value
-// Output: largest possible 32-bit value n
-// Error conditions: ignore overflow possibilities
-// Test Cases:
-// a^n is less than or equal to m
-// 2^4 is less than or equal to 16
-// 3^5 is less than or equal to 250
-// 4^6 is less than or equal to 10000
-// 10^1 is less than or equal to 10
-// 24^0 is less than or equal to 20
 
-MY SOLUTION:
-uint32_t Highest(uint32_t a, uint32_t m){
-uint32_t n = 0;
-uint32_t exp = 1;
 
-if(a>m){
-return 0;
+//why a greyed out
+//compare function
+
+char NewStringArray[1000][1000];
+char NewSupStringArray[1000][1000];
+
+
+int stringLen(char* array){
+    //int a = 0;
+    int length = 0;
+
+    for(int a = 0; array[a] != '\0'; a++){
+        length++;
+        //a++;
+    }
+    return length;
 }
-else if(a==m){
-return 1;
+
+void StringArray(char stringArray []) {  //add new line and tab
+    int a = 0; //letter in array (columns) counter
+    int b = 0; //letter in new array
+    int word = 0; //word counter (rows)
+
+    while (a < stringLen(stringArray)) { //CHANGE!!!
+        // inc letters in string
+        if (stringArray[a] == ' ') {
+            NewStringArray[word][a] = 0; //?
+            b = 0; //resets letter
+            word++; //increments the count
+            //make new array
+            //inc rows and reset columns
+        } else if (stringArray[a] == 0) {
+            NewStringArray[word][a] = 0;
+            b = 0;
+            word++;
+        } else if ( stringArray[a] == '\n') {
+            NewStringArray[word][a] = 0;
+            b = 0;
+            word++;
+        }else if ( stringArray[a] == '\t'){ //
+            NewStringArray[word][a] = 0;
+            b = 0;
+            word++;
+            // currently found the end of a word
+        } else {
+            //letter
+            //while( stringArray[b != "\0")
+                    NewStringArray[word][b] = stringArray[a];//increment letters
+                    b++;
+        }
+        a++; //increment letters
+
+    }
+
 }
-while(exp<=m){
-exp*=a;
- n++;
+void SuperStringArray( char superStringArray[]) {
+    int a = 0; //letter in array (columns) counter
+    int b = 0; //letter in new array
+    int word = 0; //word counter (rows)
+
+    while (a < stringLen(superStringArray)) { //do while string length is less than array
+        a++; // inc letters in string
+        if (superStringArray[a] == ' ') {
+            NewSupStringArray[word][a] = 0;
+            b = 0; //resets letter
+            word++; //increments the count
+            //make new array
+            //inc rows and reset colums
+        } else if (superStringArray[a] = 0) {
+            NewSupStringArray[word][a] = 0;
+            b = 0;
+            word++;
+        } else if ( superStringArray[a] == '\n') {
+            NewStringArray[word][a] = 0;
+            b= 0;
+            word++;
+        }else if ( superStringArray[a] == '\t'){ //
+            NewStringArray[word][a] = 0;
+            b = 0;
+            word++;
+            // currently found the end of a word
+        } else {
+            //letter
+            //while( stringArray[b != "\0")
+            NewStringArray[word][b] = superStringArray[a];//increment letters
+            b++;
+        }
+        a++; //increment letters
+
+    }
+
 }
- 
-  return n-1;
+
+
+
+void compareStrings(  );
+
+//new array for matches
+// 2 for loops to check if match
+// if same inc both and if different inc superstring
+
+//outer string , inner super string
+//how to compare string with all of superstring words and then move on to next string word
+
+
+void printSuperStrings(char targets [], char candidates []) {
+ StringArray(targets);
+
 }
+
+
